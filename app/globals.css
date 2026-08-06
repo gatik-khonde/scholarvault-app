@@ -215,3 +215,38 @@
     .hero-ctas{justify-content:center;}
     nav.links{display:none;}
   }
+  /* ---------- Google Doc Embed ---------- */
+  .doc-embed-wrap{
+    margin:4px 0 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    background:var(--paper);
+  }
+  .doc-embed{
+    width:100%;height:480px;border:none;display:block;
+  }
+  .doc-embed-open{
+    display:block;text-align:center;padding:10px;font-size:12.5px;font-weight:600;
+    color:var(--gold);background:var(--white);border-top:1px solid var(--line);
+    text-decoration:none;transition:background .15s;
+  }
+  .doc-embed-open:hover{background:var(--paper);}
+
+  /* ---------- About Page ---------- */
+  .about-content h2{
+    font-size:22px;margin:32px 0 8px;
+  }
+  .about-content h2:first-child{margin-top:0;}
+  .about-content p{
+    color:var(--ink-soft);font-size:15px;line-height:1.7;margin:0 0 10px;
+  }
+  .about-content ul{
+    list-style:none;padding:0;margin:0 0 10px;
+  }
+  .about-content ul li{
+    color:var(--ink-soft);font-size:15px;line-height:1.7;padding:6px 0;
+    padding-left:22px;position:relative;
+  }
+  .about-content ul li::before{
+    content:"";position:absolute;left:0;top:14px;width:6px;height:6px;
+    border-radius:50%;background:var(--gold);
+  }
+  .about-content ul li strong{color:var(--dark-blue);font-weight:600;}
