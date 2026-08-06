@@ -45,7 +45,7 @@ export default function AboutPage() {
 
             <h2>Meet the Founder</h2>
          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-     <img src="/gatik-khonde-Founder.jpeg" width="150" alt="Founder" />    
+     <img src="/gatik-khonde-founder.jpeg" width="150" alt="Founder" />    
             <p>
                Gatik Khonde is the founder of ScholarVault, and is responsible for all the study resources on this current website.
                Over the course of one season and a half, Gatik has achieved over 10 trophies, 28 gold medals and 12 silver medals.
