@@ -43,14 +43,16 @@ export default function AboutPage() {
               ScholarVault was created to bring order to the chaos of WSC prep. Instead of scattering notes across shared drives, group chats, and random docs, everything lives here — organized by section, filterable by topic, and always one click away.
             </p>
 
-            <h2>What's inside</h2>
-            <ul>
-              <li><strong>Published Notes</strong> — Topic write-ups and summaries, including linked Google Docs for longer material.</li>
-              <li><strong>Topic Quizzes</strong> — Short self-check quizzes with linked Google Forms.</li>
-              <li><strong>Writing Prompts</strong> — Collaborative Writing practice for framing, structure, and voice.</li>
-              <li><strong>Debate Motions</strong> — Motions with room for case notes on both sides.</li>
-              <li><strong>MCQ Archives</strong> — Full 120-question sets linked as Google Docs.</li>
-            </ul>
+            <h2>Meet the Founder</h2>
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <img src="gatik khonde founder.jpeg" width="150">      
+            <p>
+               Gatik Khonde is the founder of ScholarVault, and is responsible for all the study resources on this current website.
+               Over the course of one season and a half, Gatik has achieved over 10 trophies, 28 gold medals and 12 silver medals.
+               Gatik's favorite event of the World Scholar's Cup is the Team Debate. 
+              At the Muscat Regional Round in 2026, Gatik and his team achieved the first place overall at Team Debate.
+            </p>
+           </div>
 
             <h2>Who it's for</h2>
             <p>
