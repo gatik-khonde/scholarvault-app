@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 
 const SECTIONS = {
-  notes: { label: "note", hasLink: false, contentLabel: "Content", eyebrow: "Field Notes", title: "Published Notes", desc: "Topic write-ups and summaries, organized the way you'd want to revise them the night before a round.", empty: "No notes published yet. Add your first set of notes to get started." },
+  notes: { label: "note", hasLink: true, linkLabel: "Google Doc", linkPlaceholder: "https://docs.google.com/document/...", contentLabel: "Content (or leave blank if linking a Google Doc)", eyebrow: "Field Notes", title: "Published Notes", desc: "Topic write-ups and summaries — write inline or link a Google Doc for longer material.", empty: "No notes published yet. Add your first set of notes to get started." },
   quizzes: { label: "quiz", hasLink: true, linkLabel: "Google Form", linkPlaceholder: "https://docs.google.com/forms/...", contentLabel: "Description (what it covers, format, etc.)", eyebrow: "Scholar's Challenge", title: "Topic Quizzes", desc: "Short self-check quizzes on a single topic, including linked Google Forms.", empty: "No quizzes yet. Add a topic quiz or link a Google Form." },
   prompts: { label: "prompt", hasLink: false, contentLabel: "Prompt text", eyebrow: "Collaborative Writing", title: "Writing Prompts", desc: "Prompts to practice framing, structure, and voice under time pressure.", empty: "No writing prompts yet. Add one to start building the set." },
   motions: { label: "motion", hasLink: false, contentLabel: "Notes (case for / against, sources, etc.)", eyebrow: "Team Debate", title: "Debate Motions", desc: "Motions worth drilling — for and against, with room for your own case notes.", empty: "No motions yet. Add a motion worth drilling." },
@@ -11,6 +11,15 @@ const SECTIONS = {
 };
 
 const SECTION_KEYS = Object.keys(SECTIONS);
+
+function getGoogleDocEmbedUrl(url) {
+  if (!url) return null;
+  const match = url.match(/docs\.google\.com\/document\/d\/([a-zA-Z0-9_-]+)/);
+  if (match) {
+    return `https://docs.google.com/document/d/${match[1]}/preview`;
+  }
+  return null;
+}
 
 export default function Home() {
   const [isOwner, setIsOwner] = useState(false);
@@ -139,6 +148,7 @@ export default function Home() {
             <a href="#prompts">Writing Prompts</a>
             <a href="#motions">Debate Motions</a>
             <a href="#mcq">MCQ Archives</a>
+            <a href="/about">About</a>
           </nav>
           <button
             className={`owner-btn${isOwner ? " on" : ""}`}
@@ -230,10 +240,9 @@ export default function Home() {
                       )}
                       <span className="topic-tag">{item.topic}</span>
                       <h3>{item.title}</h3>
-                      {cfg.hasLink ? (
-                        <div className="doc-link">↗ Open {cfg.linkLabel}</div>
-                      ) : (
-                        <div className="snippet">{item.content}</div>
+                      {item.content && <div className="snippet">{item.content}</div>}
+                      {item.link && (
+                        <div className="doc-link">↗ Open {cfg.linkLabel || "link"}</div>
                       )}
                       <div className="meta">
                         <span>{new Date(item.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</span>
@@ -252,7 +261,7 @@ export default function Home() {
           <img src="/alpaca.png" alt="ScholarVault alpaca" className="footer-alpaca" style={{ width: 36 }} />
           <div className="brand-name" style={{ fontFamily: "'Fraunces',serif", color: "var(--dark-blue)" }}>ScholarVault</div>
           <p>Prepare to excel · a study library for the World Scholars Cup</p>
-          <p style={{ fontSize: 11, opacity: 0.7 }}>Alpaca icon by Freepik — flaticon.com</p>
+          <p style={{ fontSize: 11, opacity: 0.7 }}>Alpaca icon by Freepik — [flaticon.com](https://flaticon.com)</p>
         </div>
       </footer>
 
@@ -331,18 +340,33 @@ export default function Home() {
 
       {viewItem && (
         <div className="overlay" onClick={(e) => e.target === e.currentTarget && setViewItem(null)}>
-          <div className="modal view-modal" style={{ position: "relative" }}>
+          <div className="modal view-modal" style={{ position: "relative", maxWidth: viewItem.link ? 760 : 560 }}>
             <button className="close-x" onClick={() => setViewItem(null)}>&times;</button>
             <span className="topic-tag">{viewItem.topic}</span>
             <h3 style={{ marginBottom: 10 }}>{viewItem.title}</h3>
-            {viewItem.link && (
+            {viewItem.link && !getGoogleDocEmbedUrl(viewItem.link) && (
               <div style={{ marginBottom: 14 }}>
                 <a href={viewItem.link} target="_blank" rel="noopener noreferrer" className="btn btn-gold">
                   Open {SECTIONS[viewSection]?.linkLabel || "link"}
                 </a>
               </div>
             )}
-            <div className="body-text">{viewItem.content}</div>
+            {viewItem.link && getGoogleDocEmbedUrl(viewItem.link) && (
+              <div className="doc-embed-wrap">
+                <iframe
+                  src={getGoogleDocEmbedUrl(viewItem.link)}
+                  className="doc-embed"
+                  allowFullScreen
+                  title={viewItem.title}
+                />
+                <a href={viewItem.link} target="_blank" rel="noopener noreferrer" className="doc-embed-open">
+                  Open in new tab ↗
+                </a>
+              </div>
+            )}
+            {viewItem.content && (
+              <div className="body-text" style={{ marginTop: viewItem.link ? 14 : 0 }}>{viewItem.content}</div>
+            )}
           </div>
         </div>
       )}
