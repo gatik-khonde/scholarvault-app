@@ -264,7 +264,7 @@ export default function Home() {
             Connect with other World Scholar's Cup participants, share resources, debate motions, and prep together. Everyone's welcome.
           </p>
           <a
-            href="https://discord.gg/F5mXCSHvE"
+            href="https://discord.gg/aV5JH5DNrW"
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary"
