@@ -1,6 +1,4 @@
 import "./globals.css";
-import { Analytics } from "@vercel/analytics/next";
-
 
 export const metadata = {
   title: "ScholarVault — Prepare to Excel",
@@ -16,8 +14,9 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap"
           rel="stylesheet"
         />
+        <script async src="/_vercel/insights/script.js"></script>
       </head>
-            <body>{children}<Analytics /></body>
+      <body>{children}</body>
     </html>
   );
 }
