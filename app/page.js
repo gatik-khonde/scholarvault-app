@@ -7,7 +7,8 @@ const SECTIONS = {
   quizzes: { label: "quiz", hasLink: true, linkLabel: "Google Form", linkPlaceholder: "https://docs.google.com/forms/...", contentLabel: "Description (what it covers, format, etc.)", eyebrow: "Scholar's Challenge", title: "Topic Quizzes", desc: "Short self-check quizzes on a single topic, including linked Google Forms.", empty: "No quizzes yet. Add a topic quiz or link a Google Form." },
   prompts: { label: "prompt", hasLink: false, contentLabel: "Prompt text", eyebrow: "Collaborative Writing", title: "Writing Prompts", desc: "Prompts to practice framing, structure, and voice under time pressure.", empty: "No writing prompts yet. Add one to start building the set." },
   motions: { label: "motion", hasLink: false, contentLabel: "Notes (case for / against, sources, etc.)", eyebrow: "Team Debate", title: "Debate Motions", desc: "Motions worth drilling — for and against, with room for your own case notes.", empty: "No motions yet. Add a motion worth drilling." },
-  mcq: { label: "MCQ set", hasLink: true, linkLabel: "Google Doc", linkPlaceholder: "https://docs.google.com/document/...", contentLabel: "Description (topics covered, notes)", eyebrow: "Scholar's Bowl · 120 Questions", title: "MCQ Archives", desc: "Full-length 120-question sets kept as Google Docs.", empty: "No MCQ sets yet. Link your first 120-question Google Doc." },
+   mcq: { label: "MCQ set", hasLink: true, linkLabel: "Link", linkPlaceholder: "Paste a Google Doc or PDF link", contentLabel: "Description (topics covered, notes)", eyebrow: "Scholar's Bowl · 120 Questions", title: "MCQ Archives", desc: "Full-length 120-question sets — link a Google Doc or PDF.", empty: "No MCQ sets yet. Link your first 120-question set." },
+
 };
 
 const SECTION_KEYS = Object.keys(SECTIONS);
