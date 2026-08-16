@@ -47,12 +47,51 @@ export default function AboutPage() {
          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
      <img src="/gatik-khonde-founder.jpeg" width="200" alt="Founder" />    
             <p>
-               Gatik Khonde is the founder of ScholarVault, and is responsible for all the study resources on this current website.
+               Gatik Khonde is the founder of ScholarVault, and is responsible for most the study resources on this website.
                Over the course of one season and a half, Gatik has achieved over 10 trophies, 28 gold medals and 12 silver medals.
                Gatik's favorite event of the World Scholar's Cup is the Team Debate. 
               At the Muscat Regional Round in 2026, Gatik and his team achieved the first place overall at Team Debate.
             </p>
            </div>
+                        <h2>Meet the Team</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "20px", marginBottom: "24px" }}>
+          <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
+            <img src="/alpaca.png" alt="Natanel Zador" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
+            <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Natanel Zador</h3>
+            <p style={{ fontSize: "14px", opacity: 0.75 }}>Debate In Charge — manages debate motions and case prep</p>
+          </div>
+          <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
+            <img src="/alpaca.png" alt="Thorin Thompson" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
+            <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Thorin Thompson</h3>
+            <p style={{ fontSize: "14px", opacity: 0.75 }}>Debate In Charge — manages debate motions and case prep</p>
+          </div>
+          <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
+            <img src="/alpaca.png" alt="Ece Zeynep" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
+            <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Ece Zeynep</h3>
+            <p style={{ fontSize: "14px", opacity: 0.75 }}>Writing In Charge — manages writing prompts and essay prep</p>
+          </div>
+          <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
+            <img src="/alpaca.png" alt="Aakash Nair" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
+            <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Aakash Nair</h3>
+            <p style={{ fontSize: "14px", opacity: 0.75 }}>Notes &amp; Quizzes/Mocks In Charge — manages study notes, quizzes, and MCQ archives</p>
+          </div>
+          <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
+            <img src="/alpaca.png" alt="Andrew Trinh" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
+            <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Andrew Trinh</h3>
+            <p style={{ fontSize: "14px", opacity: 0.75 }}>Notes In Charge — manages published study notes</p>
+          </div>
+          <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
+            <img src="/alpaca.png" alt="Noga Kutas" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
+            <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Noga Kutas</h3>
+            <p style={{ fontSize: "14px", opacity: 0.75 }}>Quizzes &amp; Mocks In Charge — manages quizzes and MCQ archives</p>
+          </div>
+          <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
+            <img src="/alpaca.png" alt="Rainbow Lee" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
+            <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Rainbow Lee</h3>
+            <p style={{ fontSize: "14px", opacity: 0.75 }}>Quizzes/Mocks &amp; Advertisements In Charge — manages quizzes, MCQ archives, and promotions</p>
+          </div>
+        </div>
+
 
             <h2>Who it's for</h2>
             <p>
