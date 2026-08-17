@@ -53,13 +53,8 @@ export default function AboutPage() {
               At the Muscat Regional Round in 2026, Gatik and his team achieved the first place overall at Team Debate.
             </p>
            </div>
-                        <h2>Meet the Team</h2>
+                              <h2>Meet the Team</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "20px", marginBottom: "24px" }}>
-          <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
-            <img src="/alpaca.png" alt="Natanel Zador" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
-            <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Natanel Zador</h3>
-            <p style={{ fontSize: "14px", opacity: 0.75 }}>Debate In Charge — manages debate motions and case prep</p>
-          </div>
           <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
             <img src="/alpaca.png" alt="Thorin Thompson" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
             <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Thorin Thompson</h3>
@@ -71,19 +66,9 @@ export default function AboutPage() {
             <p style={{ fontSize: "14px", opacity: 0.75 }}>Writing In Charge — manages writing prompts and essay prep</p>
           </div>
           <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
-            <img src="/alpaca.png" alt="Aakash Nair" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
-            <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Aakash Nair</h3>
-            <p style={{ fontSize: "14px", opacity: 0.75 }}>Notes &amp; Quizzes/Mocks In Charge — manages study notes, quizzes, and MCQ archives</p>
-          </div>
-          <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
             <img src="/alpaca.png" alt="Andrew Trinh" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
             <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Andrew Trinh</h3>
             <p style={{ fontSize: "14px", opacity: 0.75 }}>Notes In Charge — manages published study notes</p>
-          </div>
-          <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
-            <img src="/alpaca.png" alt="Noga Kutas" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
-            <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Noga Kutas</h3>
-            <p style={{ fontSize: "14px", opacity: 0.75 }}>Quizzes &amp; Mocks In Charge — manages quizzes and MCQ archives</p>
           </div>
           <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
             <img src="/alpaca.png" alt="Rainbow Lee" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
