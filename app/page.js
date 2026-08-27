@@ -163,10 +163,9 @@ export default function Home() {
       <div className="hero" id="top">
         <div className="hero-inner">
           <div>
-            <p className="eyebrow">World Scholars Cup study library</p>
-            <h1>Notes, prompts, and<br />motions — all in one vault.</h1>
-            <p className="lede">A quiet, distraction-free home for everything you&apos;re preparing: topic notes, Scholar&apos;s Challenge quizzes, Collaborative Writing prompts, Team Debate motions, and full 120-question MCQ sets.</p>
-            <p className="slogan">Prepare to excel</p>
+                     <p className="eyebrow">The free WSC study guide for World Scholar&apos;s Cup teams</p>
+            <h1>Your WSC study guide<br />and debate guide, in one vault.</h1>
+            <p className="lede">A quiet, distraction-free home for everything you&apos;re preparing: WSC study guides and topic notes, Scholar&apos;s Challenge quizzes, Collaborative Writing prompts, our WSC debate guide of Team Debate motions, and full 120-question MCQ sets.</p>
             <div className="hero-ctas">
               <a href="#notes" className="btn btn-primary">Browse the vault</a>
               <a href="#mcq" className="btn btn-ghost">Jump to MCQ archives</a>
