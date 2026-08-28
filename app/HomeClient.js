@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import AskWidget from "./AskWidget";
 
 const SECTIONS = {
   notes: { label: "note", hasLink: true, linkLabel: "Google Doc", linkPlaceholder: "https://docs.google.com/document/...", contentLabel: "Content (or leave blank if linking a Google Doc)", eyebrow: "Field Notes", title: "Published Notes", desc: "Topic write-ups and summaries — write inline or link a Google Doc for longer material.", empty: "No notes published yet. Add your first set of notes to get started." },
@@ -394,6 +395,8 @@ export default function HomeClient({ initialData }) {
       )}
 
       <div className={`toast${toastMsg ? " show" : ""}`}>{toastMsg}</div>
+
+      <AskWidget />
     </>
   );
 }
