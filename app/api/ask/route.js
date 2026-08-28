@@ -20,7 +20,7 @@ async function buildContext() {
 }
 
 export async function POST(request) {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
       { error: "AI assistant isn't configured yet." },
@@ -51,22 +51,32 @@ export async function POST(request) {
     context = "";
   }
 
-  const prompt = `You are a helpful study assistant for World Scholar's Cup (WSC) students on a site called ScholarVault.
+  const systemPrompt = `You are a helpful study assistant for World Scholar's Cup (WSC) students on a site called ScholarVault.
 
 Answer the student's question using your general knowledge of WSC and, where relevant, the site's own content below. If the site's content directly answers the question, prioritize and reference it. Keep answers concise and friendly.
 
 SCHOLARVAULT CONTENT:
-${context || "(No content saved yet.)"}
-
-STUDENT QUESTION:
-${question}`;
+${context || "(No content saved yet.)"}`;
 
   try {
-     const response = await fetch( `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`, { method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey, }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], }), } );
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: question },
+        ],
+      }),
+    });
 
     if (!response.ok) {
       const errText = await response.text();
-      console.error("Gemini API error:", errText);
+      console.error("Groq API error:", errText);
       return NextResponse.json(
         { error: "The AI assistant is having trouble right now. Try again shortly." },
         { status: 502 }
@@ -75,7 +85,7 @@ ${question}`;
 
     const data = await response.json();
     const answer =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ??
+      data?.choices?.[0]?.message?.content ??
       "Sorry, I couldn't come up with an answer for that.";
 
     return NextResponse.json({ answer });
