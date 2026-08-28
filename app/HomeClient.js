@@ -149,15 +149,15 @@ export default function HomeClient({ initialData }) {
             <a href="#prompts">Writing Prompts</a>
             <a href="#motions">Debate Motions</a>
             <a href="#mcq">MCQ Archives</a>
-                        <a href="/about">About</a>
-            
+            <a href="/about">About</a>
+            <a
               href="#ask-ai"
               onClick={(e) => {
                 e.preventDefault();
                 window.dispatchEvent(new Event("open-ask-widget"));
               }}
             >
-              Ask AI
+              VaultX
             </a>
           </nav>
           <button
