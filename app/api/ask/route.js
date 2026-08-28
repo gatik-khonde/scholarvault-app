@@ -68,14 +68,13 @@ ${context || "(No content saved yet.)"}`;
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "openai/gpt-oss-120b",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: question },
-        ],
-      }),
-    });
-
+                  model: "openai/gpt-oss-120b",
+           messages: [
+             { role: "system", content: systemPrompt },
+             { role: "user", content: question },
+           ],
+           max_tokens: 200,
+         }),
     if (!response.ok) {
       const errText = await response.text();
       console.error("Groq API error:", errText);
