@@ -7,7 +7,15 @@ export default function AskWidget() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const scrollRef = useRef(null);
+    const scrollRef = useRef(null);
+
+  useEffect(() => {
+    function handleOpenRequest() {
+      setOpen(true);
+    }
+    window.addEventListener("open-ask-widget", handleOpenRequest);
+    return () => window.removeEventListener("open-ask-widget", handleOpenRequest);
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
