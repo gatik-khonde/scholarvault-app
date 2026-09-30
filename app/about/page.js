@@ -66,14 +66,14 @@ export default function AboutPage() {
             <p style={{ fontSize: "14px", opacity: 0.75 }}>Debate &amp; Writing In Charge — manages debate motions, case prep, writing prompts, and essay prep</p>
           </div>
           <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
-            <img src="/alpaca.png" alt="Ece Zeynep" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
-            <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Ece Zeynep</h3>
-            <p style={{ fontSize: "14px", opacity: 0.75 }}>Writing In Charge — manages writing prompts and essay prep</p>
+            <img src="/alpaca.png" alt="Gauransh Malik" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
+            <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Gauransh Malik</h3>
+            <p style={{ fontSize: "14px", opacity: 0.75 }}>Quizzes/Mocks In Charge — manages writing prompts and essay prep</p>
           </div>
           <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
             <img src="/alpaca.png" alt="Andrew Trinh" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
             <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Andrew Trinh</h3>
-            <p style={{ fontSize: "14px", opacity: 0.75 }}>Notes In Charge — manages published study notes</p>
+            <p style={{ fontSize: "14px", opacity: 0.75 }}>Notes In Charge — manages quizzes and MCQ archives</p>
           </div>
           <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
             <img src="/alpaca.png" alt="Kabir Kansal" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
