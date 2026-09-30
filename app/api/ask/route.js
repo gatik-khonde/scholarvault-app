@@ -73,7 +73,9 @@ ${context || "(No content saved yet.)"}`;
           { role: "system", content: systemPrompt },
           { role: "user", content: question },
         ],
-        max_tokens: 200,
+       max_completion_tokens: 2048,
+reasoning_effort: "medium",
+
       }),
     });
 
