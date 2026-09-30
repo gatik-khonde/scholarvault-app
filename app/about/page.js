@@ -68,7 +68,7 @@ export default function AboutPage() {
           <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
             <img src="/alpaca.png" alt="Gauransh Malik" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
             <h3 style={{ fontSize: "16px", marginBottom: "6px" }}>Gauransh Malik</h3>
-            <p style={{ fontSize: "14px", opacity: 0.75 }}>Quizzes/Mocks In Charge — manages writing prompts and essay prep</p>
+            <p style={{ fontSize: "14px", opacity: 0.75 }}>Quizzes/Mocks In Charge — manages quizze and MCQ archives</p>
           </div>
           <div style={{ border: "1px solid var(--line)", borderRadius: "10px", padding: "18px", textAlign: "center" }}>
             <img src="/alpaca.png" alt="Andrew Trinh" style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "10px" }} />
