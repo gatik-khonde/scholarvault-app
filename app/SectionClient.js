@@ -195,4 +195,79 @@ export default function SectionClient({ section }) {
             <>
               {topics.length > 0 && (
                 <div className="filters">
-                  {["All",
+                  {["All", ...topics].map((t) => (
+                    <button
+                      key={t}
+                      className={`chip${filter === t ? " active" : ""}`}
+                      onClick={() => setFilter(t)}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <div className="grid">
+                {visible.length === 0 ? (
+                  <div className="empty-state" style={{ gridColumn: "1/-1" }}>
+                    <img src="/alpaca.png" alt="" style={{ width: 44, height: 44, marginBottom: 10, opacity: 0.55 }} />
+                    <p>{cfg.empty}</p>
+                  </div>
+                ) : (
+                  visible.map((item) => (
+                    <div className="card" key={item.id} onClick={() => setViewItem(item)}>
+                      <span className="topic-tag">{item.topic}</span>
+                      <h3>{item.title}</h3>
+                      {item.content && <div className="snippet">{item.content}</div>}
+                      {item.link && <div className="doc-link">↗ Open {cfg.linkLabel}</div>}
+                      <div className="meta" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+                        <span>{new Date(item.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</span>
+                        {saveButton(item)}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+
+      {viewItem && (
+        <div className="overlay" onClick={(e) => e.target === e.currentTarget && setViewItem(null)}>
+          <div className="modal view-modal" style={{ position: "relative", maxWidth: viewItem.link ? 760 : 560 }}>
+            <button className="close-x" onClick={() => setViewItem(null)}>&times;</button>
+            <span className="topic-tag">{viewItem.topic}</span>
+            <h3 style={{ marginBottom: 10 }}>{viewItem.title}</h3>
+            <div style={{ marginBottom: 14 }}>{saveButton(viewItem)}</div>
+            {viewItem.link && !getGoogleDocEmbedUrl(viewItem.link) && (
+              <div style={{ marginBottom: 14 }}>
+                <a href={viewItem.link} target="_blank" rel="noopener noreferrer" className="btn btn-gold">
+                  Open {cfg.linkLabel}
+                </a>
+              </div>
+            )}
+            {viewItem.link && getGoogleDocEmbedUrl(viewItem.link) && (
+              <div className="doc-embed-wrap">
+                <iframe
+                  src={getGoogleDocEmbedUrl(viewItem.link)}
+                  className="doc-embed"
+                  allowFullScreen
+                  title={viewItem.title}
+                />
+                <a href={viewItem.link} target="_blank" rel="noopener noreferrer" className="doc-embed-open">
+                  Open in new tab ↗
+                </a>
+              </div>
+            )}
+            {viewItem.content && (
+              <div className="body-text" style={{ marginTop: viewItem.link ? 14 : 0 }}>{viewItem.content}</div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className={`toast${toastMsg ? " show" : ""}`}>{toastMsg}</div>
+    </>
+  );
+}
