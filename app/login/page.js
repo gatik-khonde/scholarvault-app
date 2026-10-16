@@ -26,10 +26,10 @@ function VaultBackground() {
     let sparks = [];
 
     const rings = [
-      { r: 0.30, ticks: 60, w: 1.2, dir: 1, c: GOLD, a: 0.55, len: 10 },
+      { r: 0.3, ticks: 60, w: 1.2, dir: 1, c: GOLD, a: 0.55, len: 10 },
       { r: 0.42, ticks: 90, w: 1, dir: -1, c: NAVY, a: 0.28, len: 8 },
       { r: 0.55, ticks: 36, w: 1.4, dir: 1, c: NAVY, a: 0.22, len: 16 },
-      { r: 0.70, ticks: 120, w: 1, dir: -1, c: GOLD, a: 0.35, len: 7 },
+      { r: 0.7, ticks: 120, w: 1, dir: -1, c: GOLD, a: 0.35, len: 7 },
       { r: 0.88, ticks: 48, w: 1.2, dir: 1, c: NAVY, a: 0.16, len: 14 },
     ];
 
@@ -66,7 +66,11 @@ function VaultBackground() {
       tx = e.clientX / W - 0.5;
       ty = e.clientY / H - 0.5;
     };
-    const onLeave = () => { mouse = { x: null, y: null }; tx = 0; ty = 0; };
+    const onLeave = () => {
+      mouse = { x: null, y: null };
+      tx = 0;
+      ty = 0;
+    };
     const onDown = (e) => burst(e.clientX, e.clientY, 14);
 
     function drawRings() {
@@ -156,10 +160,15 @@ function VaultBackground() {
     function drawSparks() {
       for (let i = sparks.length - 1; i >= 0; i--) {
         const s = sparks[i];
-        s.x += s.vx; s.y += s.vy;
-        s.vx *= 0.96; s.vy *= 0.96;
+        s.x += s.vx;
+        s.y += s.vy;
+        s.vx *= 0.96;
+        s.vy *= 0.96;
         s.life -= 0.02;
-        if (s.life <= 0) { sparks.splice(i, 1); continue; }
+        if (s.life <= 0) {
+          sparks.splice(i, 1);
+          continue;
+        }
         ctx.fillStyle = `rgba(217,185,104,${s.life})`;
         ctx.beginPath();
         ctx.arc(s.x, s.y, 2.2 * s.life + 0.5, 0, Math.PI * 2);
@@ -199,8 +208,33 @@ function VaultBackground() {
     };
   }, []);
 
-  return <canvas ref={ref} aria-hidden="true" className="fixed inset-0 w-full h-full z-0" />;
+  return (
+    <canvas
+      ref={ref}
+      aria-hidden="true"
+      style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", zIndex: 0, display: "block" }}
+    />
+  );
 }
+
+/* Scoped styles (hover / focus states) so nothing depends on Tailwind or global CSS */
+const css = `
+.vl-input{width:100%;box-sizing:border-box;background:#fff;border:1px solid #cfd3de;border-radius:3px;color:#0b1f4b;font-size:.95rem;padding:10px 12px;outline:none;transition:border-color .2s,box-shadow .2s;font-family:inherit}
+.vl-input::placeholder{color:#9aa2b6}
+.vl-input:focus{border-color:#b8913a;box-shadow:0 0 0 3px rgba(184,145,58,.25)}
+.vl-tab{background:none;border:0;padding:11px 0;font-size:.92rem;font-weight:500;color:#3a4a73;cursor:pointer;position:relative;font-family:inherit}
+.vl-tab:hover{color:#0b1f4b}
+.vl-tab[aria-selected="true"]{color:#0b1f4b}
+.vl-tab[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#b8913a}
+.vl-btn{width:100%;border:0;border-radius:3px;padding:12px;font-size:.95rem;font-weight:600;color:#fff;background:#0b1f4b;box-shadow:inset 0 -2px 0 #b8913a;cursor:pointer;transition:background .2s;font-family:inherit}
+.vl-btn:hover{background:#13306e}
+.vl-btn:disabled{opacity:.7;cursor:wait}
+.vl-link{background:none;border:0;padding:0;font-size:.85rem;font-weight:600;color:#0b1f4b;text-decoration:underline;text-decoration-color:#b8913a;text-underline-offset:3px;cursor:pointer;font-family:inherit}
+.vl-link:hover{color:#b8913a}
+.vl-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;padding:8px;font-size:.78rem;font-weight:500;color:#3a4a73;cursor:pointer;font-family:inherit}
+.vl-eye:hover{color:#0b1f4b}
+.vl-btn:focus-visible,.vl-tab:focus-visible,.vl-link:focus-visible,.vl-eye:focus-visible{outline:2px solid #b8913a;outline-offset:2px}
+`;
 
 /* ---------- Login page ---------- */
 export default function LoginPage() {
@@ -251,22 +285,41 @@ export default function LoginPage() {
     setOkMessage("");
   }
 
-  const tab = (active) =>
-    `relative py-3 text-[0.95rem] font-medium transition-colors ${
-      active ? "text-[#0b1f4b]" : "text-[#3a4a73] hover:text-[#0b1f4b]"
-    }`;
-
-  const input =
-    "w-full bg-white border border-[#cfd3de] rounded-[3px] px-[14px] py-3 text-base text-[#0b1f4b] outline-none transition placeholder:text-[#9aa2b6] focus:border-[#b8913a] focus:ring-[3px] focus:ring-[#b8913a]/25";
+  const label = { display: "block", fontSize: "0.82rem", fontWeight: 500, marginBottom: 4 };
 
   return (
-    <div className={`${sans.className} relative min-h-screen bg-white text-[#0b1f4b]`}>
+    <div
+      className={sans.className}
+      style={{ position: "fixed", inset: 0, zIndex: 50, overflowY: "auto", background: "#fff", color: "#0b1f4b" }}
+    >
+      <style>{css}</style>
       <VaultBackground />
 
-      <main className="relative z-10 min-h-screen flex items-center justify-center px-4 py-6">
-        <section className="w-full max-w-[440px] bg-white/95 backdrop-blur-[6px] border border-[#e4e0d4] border-t-[3px] border-t-[#b8913a] rounded px-9 pt-10 pb-8 max-[480px]:px-[22px] shadow-[0_30px_70px_-30px_rgba(11,31,75,0.35)]">
-          {/* Seal */}
-          <svg className="w-[54px] h-[54px] mx-auto mb-[18px] block" viewBox="0 0 54 54" aria-hidden="true">
+      <main
+        style={{
+          position: "relative",
+          zIndex: 1,
+          minHeight: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "24px 16px",
+          boxSizing: "border-box",
+        }}
+      >
+        <section
+          style={{
+            width: "min(400px, calc(100vw - 32px))",
+            boxSizing: "border-box",
+            background: "rgba(255,255,255,0.95)",
+            border: "1px solid #e4e0d4",
+            borderTop: "3px solid #b8913a",
+            borderRadius: 4,
+            padding: "28px 28px 24px",
+            boxShadow: "0 30px 70px -30px rgba(11,31,75,0.35)",
+          }}
+        >
+          <svg viewBox="0 0 54 54" aria-hidden="true" style={{ width: 44, height: 44, display: "block", margin: "0 auto 12px" }}>
             <circle cx="27" cy="27" r="25" fill="#0b1f4b" />
             <circle cx="27" cy="27" r="25" fill="none" stroke="#d9b968" strokeWidth="1.5" />
             <circle cx="27" cy="27" r="19" fill="none" stroke="#b8913a" strokeWidth=".8" strokeDasharray="2 3" />
@@ -275,42 +328,45 @@ export default function LoginPage() {
             <circle cx="27" cy="31" r="1.8" fill="#0b1f4b" />
           </svg>
 
-          <h1 className={`${serif.className} text-center text-[2.3rem] max-[480px]:text-[2rem] leading-[1.05] font-semibold mb-2`}>
+          <h1
+            className={serif.className}
+            style={{ fontSize: "1.9rem", lineHeight: 1.1, fontWeight: 600, textAlign: "center", margin: "0 0 6px" }}
+          >
             Log into your vault
           </h1>
-          <p className="text-center text-[#3a4a73] text-[0.92rem] mb-[26px]">
+          <p style={{ textAlign: "center", color: "#3a4a73", fontSize: "0.85rem", margin: "0 0 18px" }}>
             {mode === "login"
               ? "Welcome back to ScholarVault. Enter your details to open it."
               : "Set up your ScholarVault in under a minute."}
           </p>
 
-          {/* Tabs */}
-          <div className="grid grid-cols-2 border-b border-[#e4e0d4] mb-6" role="tablist">
+          <div
+            role="tablist"
+            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: "1px solid #e4e0d4", marginBottom: 20 }}
+          >
             <button
               type="button"
               role="tab"
+              className="vl-tab"
               aria-selected={mode === "login"}
               onClick={() => switchMode("login")}
-              className={tab(mode === "login")}
             >
               Log in
-              {mode === "login" && <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-[#b8913a]" />}
             </button>
             <button
               type="button"
               role="tab"
+              className="vl-tab"
               aria-selected={mode === "signup"}
               onClick={() => switchMode("signup")}
-              className={tab(mode === "signup")}
             >
               Create account
-              {mode === "signup" && <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-[#b8913a]" />}
             </button>
           </div>
 
           <form onSubmit={handleSubmit}>
-            <div className="mb-[18px]">
-              <label htmlFor="email" className="block text-[0.85rem] font-medium mb-1.5">
+            <div style={{ marginBottom: 14 }}>
+              <label htmlFor="email" style={label}>
                 Email address
               </label>
               <input
@@ -321,15 +377,15 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className={input}
+                className="vl-input"
               />
             </div>
 
-            <div className="mb-6">
-              <label htmlFor="password" className="block text-[0.85rem] font-medium mb-1.5">
+            <div style={{ marginBottom: 18 }}>
+              <label htmlFor="password" style={label}>
                 Password
               </label>
-              <div className="relative">
+              <div style={{ position: "relative" }}>
                 <input
                   id="password"
                   type={showPw ? "text" : "password"}
@@ -339,46 +395,65 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="At least 6 characters"
-                  className={`${input} pr-16`}
+                  className="vl-input"
+                  style={{ paddingRight: 60 }}
                 />
                 <button
                   type="button"
+                  className="vl-eye"
                   onClick={() => setShowPw(!showPw)}
                   aria-label={showPw ? "Hide password" : "Show password"}
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 text-[0.8rem] font-medium text-[#3a4a73] hover:text-[#0b1f4b]"
                 >
                   {showPw ? "Hide" : "Show"}
                 </button>
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={busy}
-              className="w-full rounded-[3px] py-3.5 text-base font-semibold bg-[#0b1f4b] text-white shadow-[inset_0_-2px_0_#b8913a] transition hover:bg-[#13306e] active:translate-y-px disabled:opacity-70 disabled:cursor-wait"
-            >
+            <button type="submit" disabled={busy} className="vl-btn">
               {busy ? "One moment..." : mode === "login" ? "Open my vault" : "Create my vault"}
             </button>
           </form>
 
           {message && (
-            <p role="alert" className="mt-4 text-sm text-[#a3262a] bg-[#a3262a]/5 border border-[#a3262a]/25 rounded-[3px] px-4 py-3">
+            <p
+              role="alert"
+              style={{
+                margin: "14px 0 0",
+                fontSize: "0.85rem",
+                color: "#a3262a",
+                background: "rgba(163,38,42,0.06)",
+                border: "1px solid rgba(163,38,42,0.25)",
+                borderRadius: 3,
+                padding: "8px 12px",
+              }}
+            >
               {message}
             </p>
           )}
 
           {okMessage && (
-            <p role="status" className="mt-4 text-sm text-[#0b1f4b] bg-[#b8913a]/10 border border-[#b8913a]/40 rounded-[3px] px-4 py-3">
+            <p
+              role="status"
+              style={{
+                margin: "14px 0 0",
+                fontSize: "0.85rem",
+                color: "#0b1f4b",
+                background: "rgba(184,145,58,0.12)",
+                border: "1px solid rgba(184,145,58,0.45)",
+                borderRadius: 3,
+                padding: "8px 12px",
+              }}
+            >
               {okMessage}
             </p>
           )}
 
-          <p className="text-center text-[0.88rem] text-[#3a4a73] mt-[22px]">
+          <p style={{ textAlign: "center", fontSize: "0.85rem", color: "#3a4a73", margin: "16px 0 0" }}>
             {mode === "login" ? "New here? " : "Already have a vault? "}
             <button
               type="button"
+              className="vl-link"
               onClick={() => switchMode(mode === "login" ? "signup" : "login")}
-              className="font-semibold text-[#0b1f4b] underline decoration-[#b8913a] underline-offset-[3px] hover:text-[#b8913a]"
             >
               {mode === "login" ? "Create an account" : "Log in"}
             </button>
