@@ -18,18 +18,19 @@ export default function LoginPage() {
     setMessage("");
 
     if (mode === "signup") {
-      const { error } = await supabase.auth.signUp({ email, password });
-      if (error) {
-        setMessage("Sign-up failed: " + [error.me](https://error.me)ssage);
+      const { error: errorMsg } = await supabase.auth.signUp({ email, password });
+      if (errorMsg) {
+        setMessage("Sign-up failed: " + [errorMsg.me](https://errorMsg.me)ssage);
+        setLoading(false);
         return;
       }
       setMessage("Check your email to confirm your account, then log in!");
       setLoading(false);
     } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        setMessage("Login failed: " + [error.me](https://error.me)ssage);
-                setMessage("Login failed: " + [error.me](https://error.me)ssage);
+      const { error: errorMsg } = await supabase.auth.signInWithPassword({ email, password });
+      if (errorMsg) {
+        setMessage("Login failed: " + [errorMsg.me](https://errorMsg.me)ssage);
+        setLoading(false);
         return;
       }
       router.push("/myspace");
@@ -56,8 +57,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg bg-slate-800 px-3 py-2 text-slate-100 outline-none focus:ring-2 focus:ring-indigo-500"
-                            placeholder="[you@example.com](mailto:you@example.com)"
-
+              placeholder="your email here"
             />
           </div>
 
@@ -87,13 +87,13 @@ export default function LoginPage() {
 
         <p className="text-center mt-4 text-slate-400">
           {mode === "login" ? (
-            <>No account?{" "}
+            <>No account{" "}
               <button onClick={() => setMode("signup")} className="text-indigo-400 hover:underline">
                 Sign up
               </button>
             </>
           ) : (
-            <>Already have an account?{" "}
+            <>Already have an account{" "}
               <button onClick={() => setMode("login")} className="text-indigo-400 hover:underline">
                 Log in
               </button>
