@@ -10,7 +10,6 @@ const SECTIONS = {
   quizzes: { label: "quiz", hasLink: true, linkLabel: "Google Form", linkPlaceholder: "https://docs.google.com/forms/...", contentLabel: "Description (what it covers, format, etc.)", eyebrow: "Scholar's Challenge", title: "Topic Quizzes", desc: "Short self-check quizzes on a single topic, including linked Google Forms.", empty: "No quizzes yet. Add a topic quiz or link a Google Form." },
    prompts: { label: "prompt", hasLink: true, linkLabel: "Google Doc", linkPlaceholder: "https://docs.google.com/document/d/...", contentLabel: "Prompt text", eyebrow: "Collaborative Writing", title: "Writing Prompts", desc: "Prompts to practice framing, structure, and voice under time pressure.", empty: "No writing prompts yet. Add one to start building the set." },
    motions: { label: "motion", hasLink: true, linkLabel: "Google Doc", linkPlaceholder: "https://docs.google.com/document/d/...", contentLabel: "Notes (case for / against, sources, etc.)", eyebrow: "Team Debate", title: "Debate Motions", desc: "Motions worth drilling — for and against, with room for your own case notes.", empty: "No motions yet. Add a motion worth drilling." },
-   mcq: { label: "MCQ set", hasLink: true, linkLabel: "Link", linkPlaceholder: "Paste a Google Doc or PDF link", contentLabel: "Description (topics covered, notes)", eyebrow: "Scholar's Bowl · 120 Questions", title: "MCQ Archives", desc: "Full-length 120-question sets — link a Google Doc or PDF.", empty: "No MCQ sets yet. Link your first 120-question set." },
 
 };
 
@@ -236,7 +235,6 @@ export default function HomeClient({ initialData }) {
             <a href="/quizzes">Quizzes</a>
             <a href="/prompts">Writing Prompts</a>
             <a href="/motions">Debate Motions</a>
-            <a href="#mcq">MCQ Archives</a>
             <a href="/about">About</a>
             <a href="/myspace">My Vault</a>
             <a
@@ -263,11 +261,10 @@ export default function HomeClient({ initialData }) {
           <div>
             <p className="eyebrow">The free WSC study guide for World Scholar&apos;s Cup teams</p>
             <h1>Your WSC study guide<br />and debate guide, in one vault.</h1>
-            <p className="lede">A quiet, distraction-free home for everything you&apos;re preparing: WSC study guides and topic notes, Scholar&apos;s Challenge quizzes, Collaborative Writing prompts, our WSC debate guide of Team Debate motions, and full 120-question MCQ sets.</p>
+            <p className="lede">A quiet, distraction-free home for everything you&apos;re preparing: WSC study guides and topic notes, Scholar&apos;s Challenge quizzes, Collaborative Writing prompts, and our WSC debate guide of Team Debate motions.</p>
             <p className="slogan">Prepare to excel</p>
             <div className="hero-ctas">
               <a href="#notes" className="btn btn-primary">Browse the vault</a>
-              <a href="#mcq" className="btn btn-ghost">Jump to MCQ archives</a>
             </div>
           </div>
           <div className="seal-wrap">
