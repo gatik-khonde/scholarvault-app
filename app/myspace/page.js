@@ -3,6 +3,59 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { useRouter } from "next/navigation";
+import { Cormorant_Garamond, Inter } from "next/font/google";
+
+const serif = Cormorant_Garamond({ subsets: ["latin"], weight: ["600"] });
+const sans = Inter({ subsets: ["latin"] });
+
+/* Scoped styles so nothing depends on Tailwind or global CSS */
+const css = `
+.mv-card{background:#fff;border:1px solid #e4e0d4;border-radius:4px;box-shadow:0 18px 40px -28px rgba(11,31,75,.35)}
+.mv-stat{border-top:3px solid #b8913a}
+.mv-logout{background:#fff;border:1px solid #cfd3de;border-radius:3px;color:#0b1f4b;padding:8px 16px;font-size:.85rem;font-weight:500;cursor:pointer;font-family:inherit;transition:border-color .2s,color .2s}
+.mv-logout:hover{border-color:#b8913a;color:#b8913a}
+.mv-link{display:block;text-decoration:none;color:#0b1f4b;background:#f8f6f1;border:1px solid #e4e0d4;border-left:3px solid #b8913a;border-radius:3px;padding:16px;transition:background .2s,transform .15s}
+.mv-link:hover{background:#fff;transform:translateY(-2px)}
+.mv-logout:focus-visible,.mv-link:focus-visible{outline:2px solid #b8913a;outline-offset:2px}
+.mv-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mv-grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media (max-width:600px){.mv-grid3,.mv-grid2{grid-template-columns:1fr}}
+@keyframes mv-pulse{0%,100%{opacity:1}50%{opacity:.45}}
+@media (prefers-reduced-motion:reduce){.mv-pulse{animation:none!important}.mv-link{transition:none}}
+`;
+
+const shell = {
+  position: "fixed",
+  inset: 0,
+  zIndex: 50,
+  overflowY: "auto",
+  background: "radial-gradient(circle at 50% 0%, #ffffff 0%, #f3f1ea 100%)",
+  color: "#0b1f4b",
+};
+
+/* Faint vault-dial motif in the corner (static, keeps the dashboard calm) */
+function DialMotif() {
+  const ticks = Array.from({ length: 72 }, (_, i) => {
+    const a = (i / 72) * Math.PI * 2;
+    const len = i % 6 === 0 ? 14 : 7;
+    return { x1: 300 + Math.cos(a) * 280, y1: 300 + Math.sin(a) * 280, x2: 300 + Math.cos(a) * (280 - len), y2: 300 + Math.sin(a) * (280 - len) };
+  });
+  return (
+    <svg
+      viewBox="0 0 600 600"
+      aria-hidden="true"
+      style={{ position: "absolute", top: -170, right: -170, width: 520, height: 520, opacity: 0.35, pointerEvents: "none" }}
+    >
+      <circle cx="300" cy="300" r="280" fill="none" stroke="#0b1f4b" strokeOpacity=".35" />
+      <circle cx="300" cy="300" r="220" fill="none" stroke="#b8913a" strokeOpacity=".7" />
+      <circle cx="300" cy="300" r="160" fill="none" stroke="#0b1f4b" strokeOpacity=".25" strokeDasharray="3 6" />
+      <circle cx="300" cy="300" r="100" fill="none" stroke="#b8913a" strokeOpacity=".5" />
+      {ticks.map((t, i) => (
+        <line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke="#0b1f4b" strokeOpacity=".4" />
+      ))}
+    </svg>
+  );
+}
 
 export default function MySpacePage() {
   const router = useRouter();
@@ -29,83 +82,133 @@ export default function MySpacePage() {
 
   if (checking) {
     return (
-      <main className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center">
-        <p className="text-slate-400 animate-pulse">Loading your vault...</p>
+      <main
+        className={sans.className}
+        style={{ ...shell, display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        <style>{css}</style>
+        <p className="mv-pulse" style={{ color: "#3a4a73", animation: "mv-pulse 1.6s ease-in-out infinite" }}>
+          Loading your vault...
+        </p>
       </main>
     );
   }
 
   const initial = email ? email[0].toUpperCase() : "?";
 
-  return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-950 text-slate-100 p-6">
-      <div className="max-w-3xl mx-auto py-10">
+  const eyebrow = { color: "#3a4a73", fontSize: "0.82rem", fontWeight: 500, margin: "0 0 6px" };
+  const bigNum = { fontSize: "2.2rem", fontWeight: 600, margin: 0, color: "#0b1f4b" };
+  const small = { color: "#3a4a73", fontSize: "0.8rem", margin: "4px 0 0" };
 
-        <div className="flex items-center justify-between mb-10">
-          <p className="text-sm text-slate-400">ScholarVault</p>
-          <button
-            onClick={handleLogout}
-            className="bg-slate-800/80 hover:bg-slate-700 rounded-lg px-4 py-2 text-sm transition"
-          >
+  return (
+    <main className={sans.className} style={shell}>
+      <style>{css}</style>
+      <DialMotif />
+
+      <div style={{ position: "relative", maxWidth: 760, margin: "0 auto", padding: "40px 20px 56px", boxSizing: "border-box" }}>
+        {/* Top bar */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 36 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <svg viewBox="0 0 54 54" aria-hidden="true" style={{ width: 30, height: 30 }}>
+              <circle cx="27" cy="27" r="25" fill="#0b1f4b" />
+              <circle cx="27" cy="27" r="25" fill="none" stroke="#d9b968" strokeWidth="1.5" />
+              <rect x="19" y="25" width="16" height="12" rx="2" fill="#d9b968" />
+              <path d="M22 25v-4a5 5 0 0 1 10 0v4" fill="none" stroke="#d9b968" strokeWidth="2.4" />
+              <circle cx="27" cy="31" r="1.8" fill="#0b1f4b" />
+            </svg>
+            <span className={serif.className} style={{ fontSize: "1.35rem", fontWeight: 600 }}>
+              ScholarVault
+            </span>
+          </div>
+          <button onClick={handleLogout} className="mv-logout">
             Log out
           </button>
         </div>
 
-        <div className="flex items-center gap-5 mb-10">
-          <div className="w-16 h-16 rounded-2xl bg-indigo-600 flex items-center justify-center text-2xl font-bold shadow-lg shadow-indigo-900">
+        {/* Profile */}
+        <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 32 }}>
+          <div
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: "50%",
+              background: "#0b1f4b",
+              color: "#d9b968",
+              border: "2px solid #b8913a",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "1.6rem",
+              fontWeight: 600,
+              flexShrink: 0,
+            }}
+          >
             {initial}
           </div>
-          <div>
-            <h1 className="text-3xl font-bold">My Vault</h1>
-            <p className="text-slate-400 text-sm">{email}</p>
+          <div style={{ minWidth: 0 }}>
+            <h1 className={serif.className} style={{ fontSize: "2.2rem", lineHeight: 1.05, fontWeight: 600, margin: 0 }}>
+              My Vault
+            </h1>
+            <p style={{ ...small, margin: "4px 0 0", overflowWrap: "anywhere" }}>{email}</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-          <div className="bg-slate-900/80 rounded-xl p-5 border border-slate-800">
-            <p className="text-slate-400 text-xs uppercase tracking-wider mb-1">Notes</p>
-            <p className="text-3xl font-bold text-indigo-400">0</p>
-            <p className="text-slate-500 text-xs mt-1">saved notes</p>
+        {/* Stats */}
+        <div className="mv-grid3" style={{ marginBottom: 24 }}>
+          <div className="mv-card mv-stat" style={{ padding: 20 }}>
+            <p style={eyebrow}>Notes</p>
+            <p style={bigNum}>0</p>
+            <p style={small}>saved notes</p>
           </div>
-          <div className="bg-slate-900/80 rounded-xl p-5 border border-slate-800">
-            <p className="text-slate-400 text-xs uppercase tracking-wider mb-1">Quizzes</p>
-            <p className="text-3xl font-bold text-indigo-400">0</p>
-            <p className="text-slate-500 text-xs mt-1">completed</p>
+          <div className="mv-card mv-stat" style={{ padding: 20 }}>
+            <p style={eyebrow}>Quizzes</p>
+            <p style={bigNum}>0</p>
+            <p style={small}>completed</p>
           </div>
-          <div className="bg-slate-900/80 rounded-xl p-5 border border-slate-800">
-            <p className="text-slate-400 text-xs uppercase tracking-wider mb-1">Streak</p>
-            <p className="text-3xl font-bold text-indigo-400">1</p>
-            <p className="text-slate-500 text-xs mt-1">day strong</p>
+          <div className="mv-card mv-stat" style={{ padding: 20 }}>
+            <p style={eyebrow}>Streak</p>
+            <p style={bigNum}>1</p>
+            <p style={small}>day strong</p>
           </div>
         </div>
 
-        <div className="bg-slate-900/80 rounded-xl p-6 border border-slate-800 mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold">Study progress</h2>
-            <span className="text-indigo-400 text-sm font-semibold">0%</span>
+        {/* Progress */}
+        <div className="mv-card" style={{ padding: 24, marginBottom: 24 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+            <h2 className={serif.className} style={{ fontSize: "1.5rem", fontWeight: 600, margin: 0 }}>
+              Study progress
+            </h2>
+            <span style={{ color: "#b8913a", fontSize: "0.9rem", fontWeight: 600 }}>0%</span>
           </div>
-          <div className="h-2.5 bg-slate-800 rounded-full overflow-hidden">
-            <div className="h-full w-[3%] bg-gradient-to-r from-indigo-500 to-purple-400 rounded-full"></div>
+          <div style={{ height: 10, background: "#ece8dc", borderRadius: 999, overflow: "hidden" }}>
+            <div
+              style={{
+                height: "100%",
+                width: "3%",
+                background: "linear-gradient(90deg, #b8913a, #d9b968)",
+                borderRadius: 999,
+              }}
+            />
           </div>
-          <p className="text-slate-500 text-xs mt-3">
-            Complete quizzes and save notes to fill this bar.
-          </p>
+          <p style={{ ...small, marginTop: 12 }}>Complete quizzes and save notes to fill this bar.</p>
         </div>
 
-        <div className="bg-slate-900/80 rounded-xl p-6 border border-slate-800">
-          <h2 className="text-lg font-semibold mb-2">Continue where you left off</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <a href="/" className="bg-slate-800/70 hover:bg-slate-700 rounded-lg p-4 transition">
-              <p className="font-semibold text-sm">Curriculum</p>
-              <p className="text-slate-400 text-xs mt-1">Go back to the resources</p>
+        {/* Continue */}
+        <div className="mv-card" style={{ padding: 24 }}>
+          <h2 className={serif.className} style={{ fontSize: "1.5rem", fontWeight: 600, margin: "0 0 14px" }}>
+            Continue where you left off
+          </h2>
+          <div className="mv-grid2">
+            <a href="/" className="mv-link">
+              <p style={{ fontWeight: 600, fontSize: "0.92rem", margin: 0 }}>Curriculum</p>
+              <p style={small}>Go back to the resources</p>
             </a>
-            <a href="/" className="bg-slate-800/70 hover:bg-slate-700 rounded-lg p-4 transition">
-              <p className="font-semibold text-sm">Writing Prompts</p>
-              <p className="text-slate-400 text-xs mt-1">Practice your essays</p>
+            <a href="/" className="mv-link">
+              <p style={{ fontWeight: 600, fontSize: "0.92rem", margin: 0 }}>Writing Prompts</p>
+              <p style={small}>Practice your essays</p>
             </a>
           </div>
         </div>
-
       </div>
     </main>
   );
