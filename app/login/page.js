@@ -319,7 +319,7 @@ export default function LoginPage() {
             boxShadow: "0 30px 70px -30px rgba(11,31,75,0.35)",
           }}
         >
-          <img src="/logo.png" alt="ScholarVault" style={{ width: 56, height: 56, objectFit: "contain", display: "block", margin: "0 auto 12px" }} />
+          <img src="/alpaca.png" alt="ScholarVault" style={{ width: 56, height: 56, objectFit: "contain", display: "block", margin: "0 auto 12px" }} />
 
           <h1
             className={serif.className}
