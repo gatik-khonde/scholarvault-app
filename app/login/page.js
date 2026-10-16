@@ -10,96 +10,135 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [okMessage, setOkMessage] = useState("");
+  const [busy, setBusy] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);
     setMessage("");
+    setOkMessage("");
+    setBusy(true);
 
     if (mode === "signup") {
-      const { error: errorMsg } = await supabase.auth.signUp({ email, password });
-      if (errorMsg) {
-                setMessage("Sign-up failed: " + String(errorMsg));
-        setLoading(false);
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+      });
+      setBusy(false);
+      if (signUpError) {
+        setMessage("Sign-up failed: " + String(signUpError));
         return;
       }
-      setMessage("Check your email to confirm your account, then log in!");
-      setLoading(false);
-    } else {
-      const { error: errorMsg } = await supabase.auth.signInWithPassword({ email, password });
-      if (errorMsg) {
-                setMessage("Login failed: " + String(errorMsg));
-        setLoading(false);
-        return;
-      }
-      router.push("/myspace");
-      router.refresh();
+      setOkMessage("Account created! Check your inbox for a confirmation email, then log in.");
+      return;
     }
+
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+    setBusy(false);
+    if (signInError) {
+      setMessage("Login failed: " + String(signInError));
+      return;
+    }
+    router.replace("/myspace");
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6">
+    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-950 text-slate-100 flex items-center justify-center p-6">
       <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center mb-2">
-          {mode === "login" ? "Welcome back" : "Create your account"}
-        </h1>
-        <p className="text-slate-400 text-center mb-6">
-          Save your notes and track your progress
-        </p>
 
-        <form onSubmit={handleSubmit} className="bg-slate-900 rounded-xl p-6 space-y-4">
-          <div>
-            <label className="block text-sm mb-1 text-slate-300">Email</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg bg-slate-800 px-3 py-2 text-slate-100 outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="your email here"
-            />
+        <div className="text-center mb-8">
+          <p className="text-sm text-slate-400 tracking-wide uppercase">ScholarVault</p>
+          <h1 className="text-3xl font-bold mt-1">Welcome back</h1>
+          <p className="text-slate-400 text-sm mt-2">
+            Log in to open your vault, or create a new one.
+          </p>
+        </div>
+
+        <div className="bg-slate-900/80 backdrop-blur rounded-2xl p-8 border border-slate-800 shadow-xl">
+
+          <div className="grid grid-cols-2 gap-2 bg-slate-800/60 rounded-xl p-1 mb-6">
+            <button
+              onClick={() => { setMode("login"); setMessage(""); setOkMessage(""); }}
+              className={`rounded-lg py-2 text-sm font-semibold transition ${
+                mode === "login"
+                  ? "bg-indigo-600 text-white shadow"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              Log in
+            </button>
+            <button
+              onClick={() => { setMode("signup"); setMessage(""); setOkMessage(""); }}
+              className={`rounded-lg py-2 text-sm font-semibold transition ${
+                mode === "signup"
+                  ? "bg-indigo-600 text-white shadow"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              Sign up
+            </button>
           </div>
 
-          <div>
-            <label className="block text-sm mb-1 text-slate-300">Password</label>
-            <input
-              type="password"
-              required
-              minLength={6}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg bg-slate-800 px-3 py-2 text-slate-100 outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="At least 6 characters"
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs uppercase tracking-wider text-slate-400 mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your email"
+                className="w-full bg-slate-800/70 border border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 transition placeholder:text-slate-500"
+              />
+            </div>
 
-          {message && <p className="text-sm text-indigo-300">{message}</p>}
+            <div>
+              <label className="block text-xs uppercase tracking-wider text-slate-400 mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="at least 6 characters"
+                className="w-full bg-slate-800/70 border border-slate-700 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 transition placeholder:text-slate-500"
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 rounded-lg py-2.5 font-semibold transition"
-          >
-            {loading ? "Please wait..." : mode === "login" ? "Log in" : "Sign up"}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={busy}
+              className="w-full bg-gradient-to-r from-indigo-600 to-purple-500 hover:from-indigo-500 hover:to-purple-400 disabled:opacity-60 rounded-xl py-3 text-sm font-semibold transition shadow-lg shadow-indigo-900/50"
+            >
+              {busy ? "One moment..." : mode === "login" ? "Open my vault" : "Create my vault"}
+            </button>
+          </form>
 
-        <p className="text-center mt-4 text-slate-400">
-          {mode === "login" ? (
-            <>No account{" "}
-              <button onClick={() => setMode("signup")} className="text-indigo-400 hover:underline">
-                Sign up
-              </button>
-            </>
-          ) : (
-            <>Already have an account{" "}
-              <button onClick={() => setMode("login")} className="text-indigo-400 hover:underline">
-                Log in
-              </button>
-            </>
+          {message && (
+            <p className="mt-4 text-sm text-red-400 bg-red-950/40 border border-red-900/50 rounded-xl px-4 py-3">
+              {message}
+            </p>
           )}
+
+          {okMessage && (
+            <p className="mt-4 text-sm text-emerald-400 bg-emerald-950/40 border border-emerald-900/50 rounded-xl px-4 py-3">
+              {okMessage}
+            </p>
+          )}
+
+        </div>
+
+        <p className="text-center text-slate-500 text-xs mt-6">
+          By signing up you agree to use ScholarVault for good, not evil.
         </p>
+
       </div>
     </main>
   );
