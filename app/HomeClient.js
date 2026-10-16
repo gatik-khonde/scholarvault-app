@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "../lib/supabase";
 import AskWidget from "./AskWidget";
 
 const SECTIONS = {
@@ -24,6 +26,7 @@ function getGoogleDocEmbedUrl(url) {
 }
 
 export default function HomeClient({ initialData }) {
+  const router = useRouter();
   const [isOwner, setIsOwner] = useState(false);
   const [data, setData] = useState(initialData || {});
   const [filters, setFilters] = useState({});
@@ -38,6 +41,10 @@ export default function HomeClient({ initialData }) {
 
   const [viewItem, setViewItem] = useState(null);
   const [viewSection, setViewSection] = useState(null);
+
+  // Saved-to-vault state (keys look like "notes:<id>")
+  const [savedIds, setSavedIds] = useState([]);
+  const [savingKey, setSavingKey] = useState("");
 
   const showToast = useCallback((msg) => {
     setToastMsg(msg);
@@ -58,7 +65,88 @@ export default function HomeClient({ initialData }) {
       .then((r) => r.json())
       .then((j) => setIsOwner(!!j.isOwner))
       .catch(() => {});
+
+    // Load which items this visitor has already saved (only if logged in)
+    supabase.auth.getSession().then(({ data: s }) => {
+      if (!s || !s.session) return;
+      supabase
+        .from("saved_notes")
+        .select("note_id")
+        .then(({ data: rows }) => {
+          if (rows) setSavedIds(rows.map((r) => r.note_id));
+        });
+    });
   }, []);
+
+  async function toggleSave(e, section, item) {
+    e.stopPropagation(); // don't open the item's popup
+    const { data: s } = await supabase.auth.getSession();
+    if (!s || !s.session) {
+      showToast("Log in to save items to your vault.");
+      setTimeout(() => router.push("/login"), 900);
+      return;
+    }
+    const noteKey = `${section}:${item.id}`;
+    if (savingKey === noteKey) return;
+    setSavingKey(noteKey);
+
+    if (savedIds.includes(noteKey)) {
+      const { error } = await supabase.from("saved_notes").delete().eq("note_id", noteKey);
+      if (error) {
+        showToast("Could not remove — please try again.");
+      } else {
+        setSavedIds((ids) => ids.filter((x) => x !== noteKey));
+        showToast("Removed from your vault.");
+      }
+    } else {
+      const { error } = await supabase.from("saved_notes").insert({
+        user_id: s.session.user.id,
+        note_id: noteKey,
+        title: item.title,
+        category: item.topic || "",
+        doc_url: item.link || `/#${section}`,
+      });
+      if (error) {
+        showToast("Could not save — please try again.");
+      } else {
+        setSavedIds((ids) => [...ids, noteKey]);
+        showToast("Saved to your vault.");
+      }
+    }
+    setSavingKey("");
+  }
+
+  function saveButton(section, item) {
+    const noteKey = `${section}:${item.id}`;
+    const isSaved = savedIds.includes(noteKey);
+    return (
+      <button
+        type="button"
+        onClick={(e) => toggleSave(e, section, item)}
+        disabled={savingKey === noteKey}
+        aria-pressed={isSaved}
+        aria-label={isSaved ? "Remove from your vault" : "Save to your vault"}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          cursor: savingKey === noteKey ? "wait" : "pointer",
+          fontFamily: "inherit",
+          fontSize: 12.5,
+          fontWeight: 600,
+          lineHeight: 1,
+          padding: "7px 12px",
+          borderRadius: 999,
+          border: "1px solid var(--gold, #b8913a)",
+          background: isSaved ? "var(--dark-blue, #0b1f4b)" : "#fff",
+          color: isSaved ? "var(--gold-soft, #d9b968)" : "var(--dark-blue, #0b1f4b)",
+        }}
+      >
+        <span aria-hidden="true">{isSaved ? "★" : "☆"}</span>
+        {isSaved ? "Saved" : "Save"}
+      </button>
+    );
+  }
 
   async function handleSignOut() {
     await fetch("/api/logout", { method: "POST" });
@@ -255,8 +343,9 @@ export default function HomeClient({ initialData }) {
                       {item.link && (
                         <div className="doc-link">↗ Open {cfg.linkLabel || "link"}</div>
                       )}
-                      <div className="meta">
+                      <div className="meta" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
                         <span>{new Date(item.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</span>
+                        {saveButton(key, item)}
                       </div>
                     </div>
                   ))
@@ -377,6 +466,7 @@ export default function HomeClient({ initialData }) {
             <button className="close-x" onClick={() => setViewItem(null)}>&times;</button>
             <span className="topic-tag">{viewItem.topic}</span>
             <h3 style={{ marginBottom: 10 }}>{viewItem.title}</h3>
+            <div style={{ marginBottom: 14 }}>{saveButton(viewSection, viewItem)}</div>
             {viewItem.link && !getGoogleDocEmbedUrl(viewItem.link) && (
               <div style={{ marginBottom: 14 }}>
                 <a href={viewItem.link} target="_blank" rel="noopener noreferrer" className="btn btn-gold">
