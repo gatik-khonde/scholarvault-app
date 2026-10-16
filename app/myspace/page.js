@@ -30,7 +30,7 @@ export default function MySpacePage() {
   if (checking) {
     return (
       <main className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center">
-        <p className="text-slate-400 animate-pulse">Loading your space...</p>
+        <p className="text-slate-400 animate-pulse">Loading your vault...</p>
       </main>
     );
   }
@@ -56,7 +56,7 @@ export default function MySpacePage() {
             {initial}
           </div>
           <div>
-            <h1 className="text-3xl font-bold">My Space</h1>
+            <h1 className="text-3xl font-bold">My Vault</h1>
             <p className="text-slate-400 text-sm">{email}</p>
           </div>
         </div>
