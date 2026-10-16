@@ -150,7 +150,7 @@ export default function HomeClient({ initialData }) {
             <a href="#motions">Debate Motions</a>
             <a href="#mcq">MCQ Archives</a>
             <a href="/about">About</a>
-              <a href="/myspace">My Space</a>
+              <a href="/myspace">My Vault</a>
             <a
               href="#ask-ai"
               onClick={(e) => {
