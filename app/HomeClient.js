@@ -6,7 +6,7 @@ import { supabase } from "../lib/supabase";
 import AskWidget from "./AskWidget";
 
 const SECTIONS = {
-  notes: { label: "note", hasLink: true, linkLabel: "Google Doc", linkPlaceholder: "https://docs.google.com/document/...", contentLabel: "Content (or leave blank if linking a Google Doc)", eyebrow: "Field Notes", title: "Published Notes", desc: "Topic write-ups and summaries — write inline or link a Google Doc for longer material.", empty: "No notes published yet. Add your first set of notes to get started." },
+  notes: { label: "note", hasLink: true, linkLabel: "Google Doc", linkPlaceholder: "https://docs.google.com/document/d/...", contentLabel: "Content (or leave blank if linking a Google Doc)", eyebrow: "Field Notes", title: "Published Notes", desc: "Topic write-ups and summaries — write inline or link a Google Doc for longer material.", empty: "No notes published yet. Add your first set of notes to get started." },
   quizzes: { label: "quiz", hasLink: true, linkLabel: "Google Form", linkPlaceholder: "https://docs.google.com/forms/...", contentLabel: "Description (what it covers, format, etc.)", eyebrow: "Scholar's Challenge", title: "Topic Quizzes", desc: "Short self-check quizzes on a single topic, including linked Google Forms.", empty: "No quizzes yet. Add a topic quiz or link a Google Form." },
    prompts: { label: "prompt", hasLink: true, linkLabel: "Google Doc", linkPlaceholder: "https://docs.google.com/document/...", contentLabel: "Prompt text", eyebrow: "Collaborative Writing", title: "Writing Prompts", desc: "Prompts to practice framing, structure, and voice under time pressure.", empty: "No writing prompts yet. Add one to start building the set." },
    motions: { label: "motion", hasLink: true, linkLabel: "Google Doc", linkPlaceholder: "https://docs.google.com/document/...", contentLabel: "Notes (case for / against, sources, etc.)", eyebrow: "Team Debate", title: "Debate Motions", desc: "Motions worth drilling — for and against, with room for your own case notes.", empty: "No motions yet. Add a motion worth drilling." },
@@ -48,7 +48,7 @@ export default function HomeClient({ initialData }) {
 
   const showToast = useCallback((msg) => {
     setToastMsg(msg);
-    setTimeout(() => setToastMsg(""), 2200);
+    setTimeout(() => setToastMsg(""), 4500);
   }, []);
 
   const loadSection = useCallback(async (section) => {
@@ -99,15 +99,15 @@ export default function HomeClient({ initialData }) {
         showToast("Removed from your vault.");
       }
     } else {
-      const { error } = await supabase.from("saved_notes").insert({
+      const { error: insertErr } = await supabase.from("saved_notes").insert({
         user_id: s.session.user.id,
         note_id: noteKey,
         title: item.title,
         category: item.topic || "",
         doc_url: item.link || `/#${section}`,
       });
-      if (error) {
-        showToast("Could not save — please try again.");
+      if (insertErr) {
+        showToast("Save failed: " + [insertErr.me](https://insertErr.me)ssage);
       } else {
         setSavedIds((ids) => [...ids, noteKey]);
         showToast("Saved to your vault.");
@@ -238,7 +238,7 @@ export default function HomeClient({ initialData }) {
             <a href="#motions">Debate Motions</a>
             <a href="#mcq">MCQ Archives</a>
             <a href="/about">About</a>
-              <a href="/myspace">My Vault</a>
+            <a href="/myspace">My Vault</a>
             <a
               href="#ask-ai"
               onClick={(e) => {
@@ -356,7 +356,7 @@ export default function HomeClient({ initialData }) {
         );
       })}
 
-       <section className="block alt" id="community" style={{ textAlign: "center", padding: "80px 24px" }}>
+      <section className="block alt" id="community" style={{ textAlign: "center", padding: "80px 24px" }}>
         <div className="wrap" style={{ maxWidth: 600, margin: "0 auto" }}>
           <p className="eyebrow" style={{ marginBottom: 12 }}>Community</p>
           <h2 style={{ marginBottom: 14 }}>Join the ScholarVault Community</h2>
@@ -377,8 +377,8 @@ export default function HomeClient({ initialData }) {
           </a>
         </div>
       </section>
-    
-<footer>
+
+      <footer>
         <div className="wrap">
           <img src="/alpaca.png" alt="ScholarVault alpaca" className="footer-alpaca" style={{ width: 36 }} />
           <div className="brand-name" style={{ fontFamily: "'Fraunces',serif", color: "var(--dark-blue)" }}>ScholarVault</div>
