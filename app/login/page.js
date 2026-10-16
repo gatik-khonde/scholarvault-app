@@ -20,7 +20,7 @@ export default function LoginPage() {
     if (mode === "signup") {
       const { error: errorMsg } = await supabase.auth.signUp({ email, password });
       if (errorMsg) {
-        setMessage("Sign-up failed: " + [errorMsg.me](https://errorMsg.me)ssage);
+                setMessage("Sign-up failed: " + String(errorMsg));
         setLoading(false);
         return;
       }
@@ -29,7 +29,7 @@ export default function LoginPage() {
     } else {
       const { error: errorMsg } = await supabase.auth.signInWithPassword({ email, password });
       if (errorMsg) {
-        setMessage("Login failed: " + [errorMsg.me](https://errorMsg.me)ssage);
+                setMessage("Login failed: " + String(errorMsg));
         setLoading(false);
         return;
       }
