@@ -21,7 +21,6 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) {
         setMessage("Sign-up failed: " + [error.me](https://error.me)ssage);
-        setLoading(false);
         return;
       }
       setMessage("Check your email to confirm your account, then log in!");
@@ -30,7 +29,7 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         setMessage("Login failed: " + [error.me](https://error.me)ssage);
-        setLoading(false);
+                setMessage("Login failed: " + [error.me](https://error.me)ssage);
         return;
       }
       router.push("/myspace");
@@ -57,7 +56,8 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg bg-slate-800 px-3 py-2 text-slate-100 outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="[you@example.com](mailto:you@example.com)"
+                            placeholder="[you@example.com](mailto:you@example.com)"
+
             />
           </div>
 
