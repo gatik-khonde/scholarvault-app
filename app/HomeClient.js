@@ -107,7 +107,7 @@ export default function HomeClient({ initialData }) {
         doc_url: item.link || `/#${section}`,
       });
       if (insertErr) {
-        showToast("Save failed: " + [insertErr.me](https://insertErr.me)ssage);
+               showToast("Save failed: " + insertErr["message"]);
       } else {
         setSavedIds((ids) => [...ids, noteKey]);
         showToast("Saved to your vault.");
