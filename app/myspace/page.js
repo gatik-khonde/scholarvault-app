@@ -109,13 +109,7 @@ export default function MySpacePage() {
         {/* Top bar */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 36 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <svg viewBox="0 0 54 54" aria-hidden="true" style={{ width: 30, height: 30 }}>
-              <circle cx="27" cy="27" r="25" fill="#0b1f4b" />
-              <circle cx="27" cy="27" r="25" fill="none" stroke="#d9b968" strokeWidth="1.5" />
-              <rect x="19" y="25" width="16" height="12" rx="2" fill="#d9b968" />
-              <path d="M22 25v-4a5 5 0 0 1 10 0v4" fill="none" stroke="#d9b968" strokeWidth="2.4" />
-              <circle cx="27" cy="31" r="1.8" fill="#0b1f4b" />
-            </svg>
+            <img src="/alpaca.png" alt="ScholarVault" style={{ width: 32, height: 32, objectFit: "contain" }} />
             <span className={serif.className} style={{ fontSize: "1.35rem", fontWeight: 600 }}>
               ScholarVault
             </span>
