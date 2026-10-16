@@ -19,9 +19,15 @@ const css = `
 .mv-logout:focus-visible,.mv-link:focus-visible{outline:2px solid #b8913a;outline-offset:2px}
 .mv-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .mv-grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-@media (max-width:600px){.mv-grid3,.mv-grid2{grid-template-columns:1fr}}
+.mv-save-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:#f8f6f1;border:1px solid #e4e0d4;border-left:3px solid #b8913a;border-radius:3px;transition:background .2s}
+.mv-save-row:hover{background:#fff}
+.mv-open{color:#0b1f4b;font-size:.8rem;font-weight:600;text-decoration:none;border-bottom:1px solid #b8913a;padding-bottom:1px;white-space:nowrap}
+.mv-open:hover{color:#b8913a}
+.mv-remove{background:none;border:none;color:#3a4a73;font-size:.78rem;cursor:pointer;font-family:inherit;padding:4px 6px;border-radius:3px;white-space:nowrap}
+.mv-remove:hover{color:#a33;background:#fdf1f1}
+@media (max-width:600px){.mv-grid3,.mv-grid2{grid-template-columns:1fr}.mv-save-row{flex-direction:column;align-items:flex-start;gap:8px}}
 @keyframes mv-pulse{0%,100%{opacity:1}50%{opacity:.45}}
-@media (prefers-reduced-motion:reduce){.mv-pulse{animation:none!important}.mv-link{transition:none}}
+@media (prefers-reduced-motion:reduce){.mv-pulse{animation:none!important}.mv-link,.mv-save-row{transition:none}}
 `;
 
 const shell = {
@@ -57,10 +63,20 @@ function DialMotif() {
   );
 }
 
+const SECTION_NAMES = {
+  notes: "Note",
+  quizzes: "Quiz",
+  prompts: "Writing Prompt",
+  motions: "Debate Motion",
+  mcq: "MCQ Set",
+};
+
 export default function MySpacePage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [checking, setChecking] = useState(true);
+  const [savedRows, setSavedRows] = useState([]);
+  const [removingKey, setRemovingKey] = useState("");
 
   useEffect(() => {
     async function check() {
@@ -71,9 +87,25 @@ export default function MySpacePage() {
       }
       setEmail(data.session.user["email"]);
       setChecking(false);
+
+      const { data: rows, error } = await supabase
+        .from("saved_notes")
+        .select("note_id, title, category, doc_url, created_at")
+        .order("created_at", { ascending: false });
+      if (!error && rows) setSavedRows(rows);
     }
     check();
   }, [router]);
+
+  async function removeFromVault(noteId) {
+    if (removingKey === noteId) return;
+    setRemovingKey(noteId);
+    const { error } = await supabase.from("saved_notes").delete().eq("note_id", noteId);
+    if (!error) {
+      setSavedRows((list) => list.filter((r) => r["note_id"] !== noteId));
+    }
+    setRemovingKey("");
+  }
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -95,6 +127,11 @@ export default function MySpacePage() {
   }
 
   const initial = email ? email[0].toUpperCase() : "?";
+
+  const noteCount = savedRows.filter((r) => r["note_id"].startsWith("notes:")).length;
+  const quizCount = savedRows.filter((r) => r["note_id"].startsWith("quizzes:")).length;
+  const totalSaved = savedRows.length;
+  const progressPct = Math.min(100, Math.round((totalSaved / 20) * 100));
 
   const eyebrow = { color: "#3a4a73", fontSize: "0.82rem", fontWeight: 500, margin: "0 0 6px" };
   const bigNum = { fontSize: "2.2rem", fontWeight: 600, margin: 0, color: "#0b1f4b" };
@@ -151,18 +188,18 @@ export default function MySpacePage() {
         <div className="mv-grid3" style={{ marginBottom: 24 }}>
           <div className="mv-card mv-stat" style={{ padding: 20 }}>
             <p style={eyebrow}>Notes</p>
-            <p style={bigNum}>0</p>
+            <p style={bigNum}>{noteCount}</p>
             <p style={small}>saved notes</p>
           </div>
           <div className="mv-card mv-stat" style={{ padding: 20 }}>
             <p style={eyebrow}>Quizzes</p>
-            <p style={bigNum}>0</p>
-            <p style={small}>completed</p>
+            <p style={bigNum}>{quizCount}</p>
+            <p style={small}>saved quizzes</p>
           </div>
           <div className="mv-card mv-stat" style={{ padding: 20 }}>
-            <p style={eyebrow}>Streak</p>
-            <p style={bigNum}>1</p>
-            <p style={small}>day strong</p>
+            <p style={eyebrow}>Total</p>
+            <p style={bigNum}>{totalSaved}</p>
+            <p style={small}>items in vault</p>
           </div>
         </div>
 
@@ -172,19 +209,68 @@ export default function MySpacePage() {
             <h2 className={serif.className} style={{ fontSize: "1.5rem", fontWeight: 600, margin: 0 }}>
               Study progress
             </h2>
-            <span style={{ color: "#b8913a", fontSize: "0.9rem", fontWeight: 600 }}>0%</span>
+            <span style={{ color: "#b8913a", fontSize: "0.9rem", fontWeight: 600 }}>{progressPct}%</span>
           </div>
           <div style={{ height: 10, background: "#ece8dc", borderRadius: 999, overflow: "hidden" }}>
             <div
               style={{
                 height: "100%",
-                width: "3%",
+                width: `${Math.max(progressPct, 2)}%`,
                 background: "linear-gradient(90deg, #b8913a, #d9b968)",
                 borderRadius: 999,
+                transition: "width .4s ease",
               }}
             />
           </div>
-          <p style={{ ...small, marginTop: 12 }}>Complete quizzes and save notes to fill this bar.</p>
+          <p style={{ ...small, marginTop: 12 }}>Save 20 items to your vault to fill this bar.</p>
+        </div>
+
+        {/* Saved items */}
+        <div className="mv-card" style={{ padding: 24, marginBottom: 24 }}>
+          <h2 className={serif.className} style={{ fontSize: "1.5rem", fontWeight: 600, margin: "0 0 14px" }}>
+            Saved to your vault
+          </h2>
+          {savedRows.length === 0 ? (
+            <p style={{ ...small, margin: 0 }}>
+              Nothing saved yet. Hit the star Save button on any note, quiz, or motion to stash it here.
+            </p>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {savedRows.map((r) => {
+                const section = (r["note_id"].split(":")[0] || "").toLowerCase();
+                const kindLabel = SECTION_NAMES[section] || "Item";
+                const dateText = new Date(r["created_at"]).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+                return (
+                  <div key={r["note_id"]} className="mv-save-row">
+                    <div style={{ minWidth: 0 }}>
+                      <p style={{ margin: 0, fontSize: "0.72rem", fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", color: "#7a6a3f" }}>
+                        {kindLabel}{r.category ? ` · ${r.category}` : ""}
+                      </p>
+                      <p style={{ margin: "4px 0 0", fontWeight: 600, fontSize: "0.95rem", overflowWrap: "anywhere" }}>
+                        {r.title || "Untitled"}
+                      </p>
+                      <p style={{ ...small, margin: "2px 0 0", fontSize: "0.74rem" }}>Saved {dateText}</p>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+                      {r.doc_url && (
+                        <a href={r.doc_url} target="_blank" rel="noopener noreferrer" className="mv-open">
+                          Open ↗
+                        </a>
+                      )}
+                      <button
+                        onClick={() => removeFromVault(r["note_id"])}
+                        className="mv-remove"
+                        disabled={removingKey === r["note_id"]}
+                        aria-label="Remove from your vault"
+                      >
+                        {removingKey === r["note_id"] ? "Removing..." : "Remove"}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Continue */}
