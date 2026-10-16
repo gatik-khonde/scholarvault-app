@@ -319,14 +319,7 @@ export default function LoginPage() {
             boxShadow: "0 30px 70px -30px rgba(11,31,75,0.35)",
           }}
         >
-          <svg viewBox="0 0 54 54" aria-hidden="true" style={{ width: 44, height: 44, display: "block", margin: "0 auto 12px" }}>
-            <circle cx="27" cy="27" r="25" fill="#0b1f4b" />
-            <circle cx="27" cy="27" r="25" fill="none" stroke="#d9b968" strokeWidth="1.5" />
-            <circle cx="27" cy="27" r="19" fill="none" stroke="#b8913a" strokeWidth=".8" strokeDasharray="2 3" />
-            <rect x="19" y="25" width="16" height="12" rx="2" fill="#d9b968" />
-            <path d="M22 25v-4a5 5 0 0 1 10 0v4" fill="none" stroke="#d9b968" strokeWidth="2.4" />
-            <circle cx="27" cy="31" r="1.8" fill="#0b1f4b" />
-          </svg>
+          <img src="/logo.png" alt="ScholarVault" style={{ width: 56, height: 56, objectFit: "contain", display: "block", margin: "0 auto 12px" }} />
 
           <h1
             className={serif.className}
